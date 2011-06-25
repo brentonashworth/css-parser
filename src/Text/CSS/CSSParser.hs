@@ -30,6 +30,8 @@ module Text.CSS.CSSParser
 
 import Text.ParserCombinators.Parsec
 
+hexDigits = ['0'..'9'] ++ ['a'..'f'] ++ ['A'..'F'] 
+
 -- | Parse an escape character.
 --
 -- > {unicode}|\\[^\r\n\f0-9a-f]
@@ -38,7 +40,10 @@ import Text.ParserCombinators.Parsec
 -- followed by any character other than \\r, \\n, \\f or a hexadecimal
 -- digit.
 escape :: Parser String
-escape = undefined
+escape = (try unicode) <|> (do a <- char '\\'
+                               b <- noneOf ("\n\r\f"++hexDigits)
+                                    <?> "escaped character"
+                               return $ (a:[b])) <?> "escape"
 
 -- | Parse a nonascii character.
 -- 

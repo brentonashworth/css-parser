@@ -28,6 +28,8 @@ tests = map (plusTestOptions options)
         , testProperty "fail unicode" prop_fail_unicode
         , testProperty "nonascii" prop_nonascii
         , testProperty "fail nonascii" prop_fail_nonascii
+        , testProperty "escape" prop_escape
+        , testProperty "fail escape" prop_fail_escape
         ]
 
 -- | Return True is parsing is successful.
@@ -89,6 +91,9 @@ prop_unicode x = canParseF trim unicode x
 prop_nonascii x = canParse nonascii x 
   where types = [x :: CSSString Nonascii]
 
+prop_escape x = canParse escape x 
+  where types = [x :: CSSString Escape]
+
 -- | As a sanity check, ensure that we aren't just parsing
 -- | anything. It would be better we could randomly generate any kind
 -- | of data which does not include a particular type.
@@ -109,4 +114,7 @@ prop_fail_unicode x = failParse unicode x
   where types = [x :: CSSString Nonascii]
 
 prop_fail_nonascii x = failParse nonascii x 
+  where types = [x :: CSSString Number]
+
+prop_fail_escape x = failParse escape x 
   where types = [x :: CSSString Number]

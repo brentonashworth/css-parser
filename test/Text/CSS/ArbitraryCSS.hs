@@ -25,6 +25,8 @@ data Comment = Comment
 data Unicode = Unicode
 -- | A nonascii character is a character in the range \o240 - \o4177777
 data Nonascii = Nonascii
+-- | An escape is either a unicode character or a backslash followed by anthing but \r, \n, \f or a hex digit.
+data Escape = Escape
 
 digitChar = ['0'..'9']
 hexChar = digitChar ++ ['a'..'f'] ++ ['A'..'F']
@@ -33,6 +35,7 @@ spaceChar = " \t\r\n\f"
 anyChar = letterChar ++ digitChar ++ spaceChar ++ 
           "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/"
 newLineChar = [ "\r\n", "\n", "\r", "\f"]
+escapeChar = filter (`notElem` ("\r\n\f" ++ hexChar)) anyChar
 
 digits :: Gen String
 digits = listOf1 $ elements digitChar
@@ -84,3 +87,12 @@ instance Arbitrary (CSSString Unicode) where
 instance Arbitrary (CSSString Nonascii) where
   arbitrary = do x <- elements ['\o240'..'\o4177777']
                  return $ CSSString Nonascii [x]
+
+instance Arbitrary (CSSString Escape) where
+  arbitrary = do n <- choose (1,2) :: Gen Int
+                 case n of
+                      1 -> do x <- arbitrary :: Gen (CSSString Unicode)
+                              return $ CSSString Escape $ show x
+                      2 -> do x <- elements escapeChar
+                              return $ CSSString Escape ("\\" ++ [x])
+
