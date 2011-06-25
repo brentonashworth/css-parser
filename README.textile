@@ -2,6 +2,8 @@ h1. CSS Parser
 
 As the name suggests, this is a CSS Parser. Well, not quite yet. I just started on it but it soon will be. The SiteCheck project will need to be able to parse CSS in order to check it. It seems like a good idea for that to be a separate project.
 
+See <a href="http://www.w3.org/TR/CSS21/syndata.html">http://www.w3.org/TR/CSS21/syndata.html</a> for a description of CSS 2.1 syntax, grammer and data types. This parser follows the more restrictive grammer found in <a href="http://www.w3.org/TR/CSS21/grammar.html">http://www.w3.org/TR/CSS21/grammar.html</a>. Many of the names used come directly from this document. Most parsers are a direct translation of this specification. Higher level parsers may differ a bit in order to account for additional CSS semantics not expressed in the grammer.
+
 h2. Building
 
 To work with this project, use some combination of the following make commands:
@@ -10,6 +12,18 @@ To work with this project, use some combination of the following make commands:
 make tests
 make cov
 make docs
+</code></pre>
+
+If you would like to play with the existing parsers in ghci then try this:
+
+<pre><code>$ ghci
+> :l Text.CSS.CSSParser
+> run unicode "\\00002B"
+Right "\\00002B"
+> run (unicode >> nonascii) "\\3B \o250"
+Right "\168"
+> run (num >> comment >> w >> unicode >> num) ".34/* hello */   \\00004F0.25"
+Right "0.25"
 </code></pre>
 
 h2. TODO
