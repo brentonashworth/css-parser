@@ -1,0 +1,23 @@
+h1. CSS Parser
+
+As the name suggests, this is a CSS Parser. Well, not quite yet. I just started on it but it soon will be. The SiteCheck project will need to be able to parse CSS in order to check it. It seems like a good idea for that to be a separate project.
+
+h2. Building
+
+To work with this project, use some combination of the following make commands:
+
+<pre><code>make clean
+make tests
+make cov
+make docs
+</code></pre>
+
+h2. TODO
+
+Everything.
+
+h2. License
+
+Copyright (C) 2011 Brenton Ashworth
+
+Distributed under the BSD3 license. See the file LICENSE.

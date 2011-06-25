@@ -1,0 +1,22 @@
+Name:                css-parser
+Version:             0.0.0
+Synopsis:            CSS 2.1 Parser
+Description:         CSS 2.1 Parser
+Homepage:            http://github.com/brentonashworth/css-parser
+Bug-Reports:         http://github.com/brentonashworth/css-parser
+License:             BSD3
+License-file:        LICENSE
+Author:              Brenton Ashworth
+Maintainer:          brenton at formpluslogic dot com
+Copyright:           (c) 2011 Brenton Ashworth
+Category:            Web
+Build-type:          Simple
+Cabal-version:       >=1.2
+Library
+  Exposed-modules: Text.CSS.CSSParser
+  Build-Depends:   base >= 4.0,
+                   parsec,
+                   regex-posix,
+                   regex-compat
+  Hs-Source-Dirs:  src       
+  
