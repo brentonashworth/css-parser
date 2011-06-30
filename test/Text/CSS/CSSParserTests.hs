@@ -30,6 +30,8 @@ tests = map (plusTestOptions options)
         , testProperty "fail nonascii" prop_fail_nonascii
         , testProperty "escape" prop_escape
         , testProperty "fail escape" prop_fail_escape
+        , testProperty "nmchar" prop_nmchar        
+        , testProperty "fail nmchar" prop_fail_nmchar
         ]
 
 -- | Return True is parsing is successful.
@@ -94,6 +96,9 @@ prop_nonascii x = canParse nonascii x
 prop_escape x = canParse escape x 
   where types = [x :: CSSString Escape]
 
+prop_nmchar x = canParse nmchar x 
+  where types = [x :: CSSString NameChar]
+
 -- | As a sanity check, ensure that we aren't just parsing
 -- | anything. It would be better we could randomly generate any kind
 -- | of data which does not include a particular type.
@@ -118,3 +123,6 @@ prop_fail_nonascii x = failParse nonascii x
 
 prop_fail_escape x = failParse escape x 
   where types = [x :: CSSString Number]
+
+prop_fail_nmchar x = failParse nmchar x 
+  where types = [x :: CSSString WhiteSpace]

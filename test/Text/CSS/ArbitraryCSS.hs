@@ -25,8 +25,12 @@ data Comment = Comment
 data Unicode = Unicode
 -- | A nonascii character is a character in the range \o240 - \o4177777
 data Nonascii = Nonascii
--- | An escape is either a unicode character or a backslash followed by anthing but \r, \n, \f or a hex digit.
+-- | An escape is either a unicode character or a backslash followed
+-- | by anthing but \r, \n, \f or a hex digit.
 data Escape = Escape
+-- | A name character is a digit, letter, underscore, dash, nonascii
+-- | or escape.
+data NameChar = NameChar
 
 digitChar = ['0'..'9']
 hexChar = digitChar ++ ['a'..'f'] ++ ['A'..'F']
@@ -96,3 +100,12 @@ instance Arbitrary (CSSString Escape) where
                       2 -> do x <- elements escapeChar
                               return $ CSSString Escape ("\\" ++ [x])
 
+instance Arbitrary (CSSString NameChar) where
+  arbitrary = do n <- choose (1,3) :: Gen Int
+                 case n of
+                      1 -> do x <- elements (letterChar ++ "_-")
+                              return $ CSSString NameChar [x]
+                      2 -> do x <- arbitrary :: Gen (CSSString Nonascii)
+                              return $ CSSString NameChar $ show x
+                      3 -> do x <- arbitrary :: Gen (CSSString Unicode)
+                              return $ CSSString NameChar $ show x
