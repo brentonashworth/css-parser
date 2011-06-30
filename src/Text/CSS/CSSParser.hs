@@ -15,7 +15,8 @@
 
 module Text.CSS.CSSParser
     ( -- * Compound Parsers
-      escape
+      nmchar
+    , escape
       -- * Simple Parsers
     , nonascii
     , unicode
@@ -29,6 +30,14 @@ module Text.CSS.CSSParser
     ) where
 
 import Text.ParserCombinators.Parsec
+
+-- | Parse a name character.
+--
+-- > [_a-z0-9-]|{nonascii}|{escape}
+--
+nmchar :: Parser String
+nmchar = (do x <- (letter <|> digit <|> oneOf "_-")
+             return [x]) <|> (try nonascii) <|> escape <?> "nmchar"
 
 hexDigits = ['0'..'9'] ++ ['a'..'f'] ++ ['A'..'F'] 
 
