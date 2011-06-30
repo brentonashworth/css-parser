@@ -51,7 +51,6 @@ hexDigits = ['0'..'9'] ++ ['a'..'f'] ++ ['A'..'F']
 escape :: Parser String
 escape = (try unicode) <|> (do a <- char '\\'
                                b <- noneOf ("\n\r\f"++hexDigits)
-                                    <?> "escaped character"
                                return $ (a:[b])) <?> "escape"
 
 -- | Parse a nonascii character.
